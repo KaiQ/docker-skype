@@ -20,8 +20,9 @@ create_user() {
 
   # create user with USER_UID
   if ! getent passwd ${USER} >/dev/null; then
-    adduser --disabled-login --uid ${USER_UID} --gid ${USER_GID} \
-      --gecos 'Madness.' ${USER}
+    adduser --uid ${USER_UID} --gid ${USER_GID} ${USER}
+    usermod -a -G video ${USER}
+    usermod -a -G audio ${USER}
   fi
 }
 
@@ -33,15 +34,9 @@ grant_access_to_video_devices() {
       break
     fi
   done
-
-  # create video group if requried
-  if [[ -n $VIDEO_GID ]]; then
-    getent group $VIDEO_GID || groupadd -f -g $VIDEO_GID dockervideo
-    adduser ${BROWSER_BOX_USER} dockervideo
-  fi
 }
 
 create_user
 grant_access_to_video_devices
 cd /home/${USER}
-exec sudo -HEu ${USER} PULSE_SERVER=/run/pulse/native QT_GRAPHICSSYSTEM="native" skype
+exec su $USER -c 'PULSE_SERVER=/run/pulse/native QT_GRAPHICSSYSTEM="native" skype'

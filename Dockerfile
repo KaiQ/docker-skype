@@ -1,17 +1,12 @@
-FROM debian:stable
+FROM fedora:latest
 
-MAINTAINER Jakob Runge <sicarius@g4t3.de>
+MAINTAINER Kai Trott <kaitrott@gmaill.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN dpkg --add-architecture i386
-
-RUN apt-get update \
- && apt-get install -y libpulse0:i386 pulseaudio:i386 wget sudo
-
-RUN wget http://download.skype.com/linux/skype-debian_4.3.0.37-1_i386.deb -O /usr/src/skype.deb
-RUN dpkg -i /usr/src/skype.deb || true
-RUN apt-get install -fy
+RUN dnf update -y
+RUN dnf install -y wget
+RUN wget https://download.skype.com/linux/skype-4.3.0.37-fedora.i586.rpm -O /tmp/skype.rpm
+RUN dnf install -y /tmp/skype.rpm
+RUN echo $(dbus-uuidgen) > /etc/machine-id
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod a+x /entrypoint.sh

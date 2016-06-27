@@ -21,14 +21,14 @@ docker run -it \
   -e USER_GID=$gid \
   -e USER=$USER \
   -e TZ=$tz \
-  -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
-  -v $XAUTHORITY:/.Xauthority \
-  -v `pwd`:/home/$USER \
-  -v /run/user/$uid/pulse:/run/pulse \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:Z \
+  -v /home/kaiq/.Xauthority:/.Xauthority:Z \
+  -v /run/user/$uid/pulse:/run/pulse:Z \
+  -v /home/kaiq/skype-home:/home/$USER:Z \
   --device /dev/dri \
   ${VIDEO_DEVICES} \
   --cpuset-cpus 0 \
   --memory 512mb \
   --cap-add=SYS_ADMIN \
   --rm \
-  runjak/docker-skype:latest
+  docker-fedora-skype
