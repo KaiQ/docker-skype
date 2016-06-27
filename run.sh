@@ -11,8 +11,8 @@ prepare_docker_device_parameters() {
 }
 prepare_docker_device_parameters
 xhost +local:$USER
-uid=$(id -u)
-gid=$(id -g)
+uid=$(id -u $USER)
+gid=$(id -g $USER)
 tz=$(date +%Z)
 docker run -it \
   -e DISPLAY=$DISPLAY \
